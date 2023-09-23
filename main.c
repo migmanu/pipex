@@ -6,16 +6,11 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/22 19:47:03 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/09/23 14:12:47 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	exec()
-{
-
-}
 
 void	child(char *argv[], int fd[], char *env[])
 {
@@ -23,10 +18,7 @@ void	child(char *argv[], int fd[], char *env[])
 
 	filein = open(argv[1], O_RDONLY, 0777);
 	if (filein == -1)
-	{
-		perror("error");
-		exit(EXIT_FAILURE);
-	}
+		error();
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(filein, STDIN_FILENO);
 	close(fd[0]);
@@ -39,10 +31,7 @@ void	parent(char *argv[], int fd[], char *env[])
 
 	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1)
-	{
-		perror("error");
-		exit(EXIT_FAILURE);
-	}
+		error();
 	dup2(fd[0], STDIN_FILENOL);
 	dup2(fileout, STDOUT_FILENO);
 	close(fd[1]);
