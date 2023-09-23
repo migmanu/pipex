@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/23 15:05:01 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:30:37 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,37 @@ char	*get_path(char *cmd, char *env[])
 	while (path_vec[i])
 		free(path_vec[i++]);
 	free(path_vec);
+	return (NULL);
 }
 
-void	exec(char *cmd, char *env[])
+void	exec(char *cmd_str, char *env[])
 {
+	char	**cmd;
+	char	*path;
+	int		i;
 
+	cmd = ft_split(cmd_str, ' ');
+	path = get_path(cmd[0], env);
+	i = 0;
+	if (!path)
+	{
+		while (cmd[i])
+			free(cmd[i++]);
+		free(cmd);
+		error();
+	}
+	if (execve(path, cmd, env) == -1)
+		error();
 }
 
 void	error(void)
 {
-		perror("error");
-		exit(EXIT_FAILURE);
+	perror("Error in function. Exiting");
+	exit(EXIT_FAILURE);
 }
-
+/*
 int	main(int argc, char *argv[], char *env[])
 {
-	get_path("ls", env);
+	exec("pwd", env);
 	return (0);
-}
+}*/

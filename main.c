@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/23 18:37:10 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/09/23 18:43:52 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	parent(char *argv[], int fd[], char *env[])
 	exec(argv[3], env);
 }
 
-int main(int argc, char *argv[], char *env[])
+int	main(int argc, char *argv[], char *env[])
 {
 	int		fd[2];
 	int		test_file;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[], char *env[])
 
 	test_file = open(argv[1], 0, 0);
 	if (test_file < 0)
-		error();
+		return (1);
 	close(test_file);
 	if (argc != 5)
 		error();
