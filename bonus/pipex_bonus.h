@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_pipex.h                                      :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/26 14:53:57 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/27 18:42:06 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H 
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -26,16 +26,11 @@
 
 typedef struct s_pipex
 {
-	int	in_fd;
-	int	out_fd;
-	int	cmd_count;
+	int	infile;
+	int	outfile;
+	int	pipe_read;
+	int	pipe_write;
 }	t_pipex;
-
-typedef enum e_bool
-{
-	false = 0,
-	true = 1
-}	t_bool;
 
 # ifndef FALSE
 #  define FALSE false
@@ -46,7 +41,9 @@ typedef enum e_bool
 # endif
 
 // utils.c
-void	error(void);
-void	exec(char *cmd_str, char *env[]);
+void	handle_error(t_pipex *data, char *cmd);
+int		exec(char *cmd_str, char *env[]);
+int		open_file(char *file, int file_type);
+void	pipe_cmds(t_pipex *data, char *cmd, char **env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/26 15:00:48 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/27 18:48:19 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,22 @@ char	*get_path(char *cmd, char *env[])
 	return (NULL);
 }
 
-void	exec(char *cmd_str, char *env[])
+int	open_file(char *file, int file_type)
+{
+	int	fd;
+
+	if (file_type == 0)
+	{
+		fd = open(file, O_RDONLY, 0777);
+	}
+	if (file_type == 1)
+	{
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	}
+	return (fd);
+}
+
+int	exec(char *cmd_str, char *env[])
 {
 	char	**cmd;
 	char	*path;
@@ -55,14 +70,35 @@ void	exec(char *cmd_str, char *env[])
 		while (cmd[i])
 			free(cmd[i++]);
 		free(cmd);
-		error();
+		return (-1);
 	}
 	if (execve(path, cmd, env) == -1)
-		error();
+	{
+		return (-1);
+	}
+	return (1);
 }
 
-void	error(void)
+void	handle_error(t_pipex *data, char *cmd)
 {
+	if (data != NULL)
+	{
+		if (ft_strncmp(cmd, "-i infile read", 14) == 0)
+		{
+			close(data->outfile);
+			close(data->pipe_write);
+		}
+		if (ft_strncmp(cmd, "-i infile", 9) == 0)
+		{
+			close(data->outfile);
+			close(data->pipe_read);
+			close(data->pipe_write);
+		}
+		if (ft_strncmp(cmd, "read", 4) == 0)
+			close(data->pipe_read);
+		free(data);
+		data = NULL;
+	}
 	perror("Error in function. Exiting");
 	exit(EXIT_FAILURE);
 }

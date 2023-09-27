@@ -6,63 +6,63 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/26 15:00:36 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/27 18:41:37 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	child(char *argv[], int fd[], char *env[])
+void	pipe_cmds(t_pipex *data, char *cmd, char **env)
 {
-	int	filein;
+	printf("pipe_cmds init!\n");
+	pid_t	pid;
+	int		p_fd[2];
 
-	printf("child ini, execute command %s\n", argv[2]);
-	filein = open(argv[1], O_RDONLY, 0777);
-	if (filein == -1)
-		error();
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
-	dup2(filein, STDIN_FILENO);
-	close(filein);
-	close(fd[0]);
-	exec(argv[2], env);
-}
-
-void	parent(char *argv[], int fd[], char *env[])
-{
-	int	fileout;
-
-	printf("parent ini, execute command %s\n", argv[3]);
-	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fileout == -1)
-		error();
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	dup2(fileout, STDOUT_FILENO);
-	close(fileout);
-	close(fd[1]);
-	exec(argv[3], env);
+	if (pipe(p_fd) == -1)
+		exit(0);
+	data->pipe_read = p_fd[0];
+	data->pipe_write = p_fd[1];
+	pid = fork();
+	if (pid == -1)
+		handle_error(data, "-i infile");
+	if (pid == 0)
+	{
+		close(data->pipe_read);
+		dup2(data->pipe_write, 1);
+		if (exec(cmd, env) == -1)
+		{
+			ft_putendl_fd("exec failed", 2);
+			handle_error(data, "-i infile read");
+		}
+	}
+	else
+	{
+		close(data->pipe_write);
+		dup2(data->pipe_read, 0);
+	}
 }
 
 int	main(int argc, char *argv[], char *env[])
 {
-	int		fd[2];
-	int		test_file;
-	pid_t	pid;
+	int		i;
+	t_pipex	*data;
 
-	test_file = open(argv[1], 0, 0);
-	if (test_file < 0)
-		return (1);
-	close(test_file);
-	if (argc != 5)
-		error();
-	if (pipe(fd) == -1)
-		error();
-	pid = fork();
-	if (pid == -1)
-		error();
-	if (pid == 0)
-		child(argv, fd, env);
-	else
-		parent(argv, fd, env);
+	data = malloc(sizeof(t_pipex));
+	if (data == NULL)
+		return (-1);
+	if (argc < 5)
+		handle_error(data "none");
+	i = 2;
+	// TODO: add here_doc
+	data->infile = open_file(argv[1], 0);
+	data->outfile = open_file(argv[argc - 1], 1);
+	dup2(data->infile, 0);
+	close(data->infile);
+	while (i < argc - 2)
+		pipe_cmds(data, argv[i++], env);
+	dup2(data->outfile, 1);
+	close(data->outfile);
+	if (exec(argv[argc - 2], env) == -1)
+		handle_error(data, "read");
+	close(data->pipe_read);
 }
