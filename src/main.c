@@ -6,11 +6,11 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/24 17:32:04 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/09/29 23:33:35 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 void	child(char *argv[], int fd[], char *env[])
 {

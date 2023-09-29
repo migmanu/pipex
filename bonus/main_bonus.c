@@ -6,11 +6,11 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/29 16:19:03 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/29 23:34:15 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "../include/pipex_bonus.h"
 
 t_pipex	*g_data;
 

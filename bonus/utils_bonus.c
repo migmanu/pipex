@@ -6,11 +6,11 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/29 16:19:28 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/29 23:34:29 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "../include/pipex_bonus.h"
 
 extern t_pipex	*g_data;
 

@@ -6,11 +6,11 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/23 18:30:37 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/09/29 23:33:49 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../include/pipex.h"
 
 char	*get_path(char *cmd, char *env[])
 {
