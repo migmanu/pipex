@@ -6,11 +6,13 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/27 18:48:19 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/29 16:19:28 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
+
+extern t_pipex	*g_data;
 
 char	*get_path(char *cmd, char *env[])
 {
@@ -79,25 +81,20 @@ int	exec(char *cmd_str, char *env[])
 	return (1);
 }
 
-void	handle_error(t_pipex *data, char *cmd)
+void	handle_error(void)
 {
-	if (data != NULL)
+	if (g_data != NULL)
 	{
-		if (ft_strncmp(cmd, "-i infile read", 14) == 0)
-		{
-			close(data->outfile);
-			close(data->pipe_write);
-		}
-		if (ft_strncmp(cmd, "-i infile", 9) == 0)
-		{
-			close(data->outfile);
-			close(data->pipe_read);
-			close(data->pipe_write);
-		}
-		if (ft_strncmp(cmd, "read", 4) == 0)
-			close(data->pipe_read);
-		free(data);
-		data = NULL;
+		if (g_data->infile != -1)
+			close(g_data->infile);
+		if (g_data->outfile != -1)
+			close(g_data->outfile);
+		if (g_data->pipe_read != -1)
+			close(g_data->pipe_read);
+		if (g_data->pipe_write != -1)
+			close(g_data->pipe_write);
+		free(g_data);
+		g_data = NULL;
 	}
 	perror("Error in function. Exiting");
 	exit(EXIT_FAILURE);

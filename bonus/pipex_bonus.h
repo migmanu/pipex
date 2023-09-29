@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/27 18:42:06 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/29 16:15:14 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_pipex
 	int	outfile;
 	int	pipe_read;
 	int	pipe_write;
+	int	control;
 }	t_pipex;
 
 # ifndef FALSE
@@ -41,9 +42,10 @@ typedef struct s_pipex
 # endif
 
 // utils.c
-void	handle_error(t_pipex *data, char *cmd);
+void	handle_error(void);
 int		exec(char *cmd_str, char *env[]);
 int		open_file(char *file, int file_type);
-void	pipe_cmds(t_pipex *data, char *cmd, char **env);
+char	*get_path(char *cmd, char *env[]);
+void	pipe_cmds(char *cmd, char **env);
 
 #endif
