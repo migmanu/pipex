@@ -6,19 +6,21 @@
 #    By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/23 15:38:28 by jmigoya-          #+#    #+#              #
-#    Updated: 2023/09/26 14:59:52 by migmanu          ###   ########.fr        #
+#    Updated: 2023/09/30 22:19:53 by migmanu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-BONUS = bonus_pipex
+BONUS = pipex_bonus
 CC = cc
-CFLAGS = -Werror -Wall -Wextra
+CFLAGS = -Werror -Wall -Wextra -g
 LIBFT = ./libft
 
 FILES = src/main.c src/utils.c
 
-BONUS_FILES = bonus/main_bonus.c bonus/utils_bonus.c
+BONUS_FILES = bonus/main_bonus.c bonus/utils_bonus.c \
+			  get_next_line/get_next_line.c \
+			  get_next_line/get_next_line_utils.c
 
 OBJS = $(FILES:.c=.o)
 

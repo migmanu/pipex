@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/29 23:34:29 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/09/30 23:20:31 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,30 @@ int	open_file(char *file, int file_type)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	}
+	if (file_type == 2)
+	{
+		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	}
 	return (fd);
+}
+
+void	initialize_g_data(int argc, char *argv[])
+{
+	g_data = malloc(sizeof(t_pipex));
+	if (g_data == NULL)
+		exit(1);
+	g_data->infile = open_file(argv[1], 0);
+	if (!g_data->infile)
+		exit(1);
+	g_data->outfile = open_file(argv[argc - 1], 1);
+	if (!g_data->outfile)
+	{
+		close(g_data->infile);
+		exit(1);
+	}
+	g_data->pipe_read = -1;
+	g_data->pipe_write = -1;
+	g_data->control = 0;
 }
 
 int	exec(char *cmd_str, char *env[])
