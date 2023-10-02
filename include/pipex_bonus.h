@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/02 18:24:33 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/02 20:01:30 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define ARG_ERR		3
 # define OPEN_ERR		4
 # define PIPE_ERR		5
+# define FORK_ERR		6
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -48,6 +49,7 @@ typedef struct s_pipex
 
 // pipex_bonus.c
 char	*get_path(char *cmd, char *env[]);
-int	check_args(int argc, char *argv[]);
+int		check_args(int argc, char *argv[]);
+int		get_next_line(char **line);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:04:13 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/02 17:31:37 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/02 20:38:31 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,40 @@ int	check_args(int argc, char *argv[])
 		ft_putendl_fd("Not enough args. Use: ./pipex file1 cmd1 cmd2 file2", 2);
 		return (ARG_ERR);
 	}
+	if (ft_strnstr(argv[1], "here_doc", 8) == 0)
+		return (0);
 	if (open(argv[1], 0, 0) < 0)
 	{
 		ft_putendl_fd("Wrong input file", 2);
 		return (ARG_ERR);
 	}
 	return (0);
+}
+
+int	get_next_line(char **line)
+{
+	char	*buff;
+	int		i;
+	int		r;
+	char	c;
+
+	i = 0;
+	r = 0;
+	buff = malloc(sizeof(10000));
+	if (!buff)
+		return (-1);
+	r = read(0, &c, 1);
+	while (r && c != '\n' && c != '\0')
+	{
+		if (c != '\n' && c != '\0')
+			buff[i] = c;
+		i++;
+		r = read(0, &c, 1);
+	}
+	buff[i] = '\n';
+	buff[++i] = '\0';
+	*line = malloc(sizeof(i));
+	ft_memcpy(*line, buff, i);
+	free(buff);
+	return (r);
 }

@@ -6,7 +6,7 @@
 #    By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/23 15:38:28 by jmigoya-          #+#    #+#              #
-#    Updated: 2023/10/02 17:24:16 by jmigoya-         ###   ########.fr        #
+#    Updated: 2023/10/02 19:55:04 by jmigoya-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,6 @@ LIBFT = ./libft
 FILES = src/main.c src/utils.c
 
 BONUS_FILES = bonus/pipex_bonus.c bonus/utils_bonus.c \
-			  get_next_line/get_next_line.c \
-			  get_next_line/get_next_line_utils.c
 
 OBJS = $(FILES:.c=.o)
 
