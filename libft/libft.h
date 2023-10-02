@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 16:27:30 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/05/25 16:04:16 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/01 16:50:41 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int		ft_isascii(int c);
 int		ft_isprint(int c);
 
 size_t	ft_strlen(const char *s);
+
+void	ft_free_vec(char *vec[]);
 
 void	*ft_memset(void *s, int c, size_t n);
 

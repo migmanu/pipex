@@ -6,7 +6,7 @@
 #    By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/06 17:23:11 by jmigoya-          #+#    #+#              #
-#    Updated: 2023/05/22 18:53:55 by jmigoya-         ###   ########.fr        #
+#    Updated: 2023/10/01 16:51:03 by migmanu          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = libft.a
@@ -24,7 +24,7 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_strlen.c\
 		ft_strnstr.c ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c\
 		ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c\
 		ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c\
-		ft_putendl_fd.c ft_putnbr_fd.c
+		ft_putendl_fd.c ft_putnbr_fd.c ft_free_vec.c
 
 BONUSS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c\
 			ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c\
