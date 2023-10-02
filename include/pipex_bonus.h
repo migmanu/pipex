@@ -6,12 +6,19 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/01 18:27:32 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/02 18:24:33 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
+# define HERE_DOC ".tmp_here_doc_file"
+
+# define CMD_NOT_FOUND 127
+# define ERROR			1
+# define ARG_ERR		3
+# define OPEN_ERR		4
+# define PIPE_ERR		5
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -28,8 +35,7 @@ typedef struct s_pipex
 {
 	int	infile;
 	int	outfile;
-	int	pipe_read;
-	int	pipe_write;
+	int	pipe[2][2];
 }	t_pipex;
 
 # ifndef FALSE
@@ -40,14 +46,8 @@ typedef struct s_pipex
 #  define TRUE true
 # endif
 
-// utils.c
-void	handle_error(void);
-int		exec(char *cmd_str, char *env[]);
-int		open_file(char *file, int file_type);
+// pipex_bonus.c
 char	*get_path(char *cmd, char *env[]);
-t_pipex	*initialize_data(int argc, char *argv[]);
-
-// get_next_line.c
-char	*get_next_line(int fd);
+int	check_args(int argc, char *argv[]);
 
 #endif

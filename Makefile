@@ -6,19 +6,18 @@
 #    By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/23 15:38:28 by jmigoya-          #+#    #+#              #
-#    Updated: 2023/09/30 22:19:53 by migmanu          ###   ########.fr        #
+#    Updated: 2023/10/02 17:24:16 by jmigoya-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = pipex
-BONUS = pipex_bonus
 CC = cc
 CFLAGS = -Werror -Wall -Wextra -g
 LIBFT = ./libft
 
 FILES = src/main.c src/utils.c
 
-BONUS_FILES = bonus/main_bonus.c bonus/utils_bonus.c \
+BONUS_FILES = bonus/pipex_bonus.c bonus/utils_bonus.c \
 			  get_next_line/get_next_line.c \
 			  get_next_line/get_next_line_utils.c
 
@@ -37,8 +36,8 @@ $(NAME) : $(OBJS)
 bonus : $(BONUS_OBJS)
 	make -C $(LIBFT)
 	cp libft/libft.h .
-	mv libft.h $(BONUS)
-	$(CC) $(CFLAGS) -o $(BONUS) $(BONUS_OBJS) -L $(LIBFT) -lft
+	mv libft.h $(NAME)
+	$(CC) $(CFLAGS) -o $(NAME) $(BONUS_OBJS) -L $(LIBFT) -lft
 
 clean :
 	rm -f $(OBJS)
