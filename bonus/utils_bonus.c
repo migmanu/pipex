@@ -6,13 +6,13 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/30 23:20:31 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/01 18:09:58 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
-extern t_pipex	*g_data;
+extern t_pipex	*data;
 
 char	*get_path(char *cmd, char *env[])
 {
@@ -32,14 +32,14 @@ char	*get_path(char *cmd, char *env[])
 		path = ft_strjoin(path_vec[i], tmp_path);
 		free(tmp_path);
 		if (access(path, F_OK) == 0)
+		{
+			ft_free_vec(path_vec);
 			return (path);
+		}
 		free(path);
 		i++;
 	}
-	i = 0;
-	while (path_vec[i])
-		free(path_vec[i++]);
-	free(path_vec);
+	ft_free_vec(path_vec);
 	return (NULL);
 }
 
@@ -62,62 +62,64 @@ int	open_file(char *file, int file_type)
 	return (fd);
 }
 
-void	initialize_g_data(int argc, char *argv[])
+t_pipex	*initialize_data(int argc, char *argv[])
 {
-	g_data = malloc(sizeof(t_pipex));
-	if (g_data == NULL)
+	t_pipex *data;
+
+	data = malloc(sizeof(t_pipex));
+	if (data == NULL)
 		exit(1);
-	g_data->infile = open_file(argv[1], 0);
-	if (!g_data->infile)
+	data->infile = open_file(argv[1], 0);
+	if (!data->infile)
 		exit(1);
-	g_data->outfile = open_file(argv[argc - 1], 1);
-	if (!g_data->outfile)
+	data->outfile = open_file(argv[argc - 1], 1);
+	if (!data->outfile)
 	{
-		close(g_data->infile);
+		close(data->infile);
 		exit(1);
 	}
-	g_data->pipe_read = -1;
-	g_data->pipe_write = -1;
-	g_data->control = 0;
+	data->pipe_read = -1;
+	data->pipe_write = -1;
+	return (data);
 }
 
 int	exec(char *cmd_str, char *env[])
 {
 	char	**cmd;
 	char	*path;
-	int		i;
 
 	cmd = ft_split(cmd_str, ' ');
 	path = get_path(cmd[0], env);
-	i = 0;
 	if (!path)
 	{
-		while (cmd[i])
-			free(cmd[i++]);
-		free(cmd);
+		ft_free_vec(cmd);
 		return (-1);
 	}
 	if (execve(path, cmd, env) == -1)
 	{
+		ft_free_vec(cmd);
+		free(path);
 		return (-1);
 	}
+	ft_free_vec(cmd);
+	free(path);
 	return (1);
 }
 
 void	handle_error(void)
 {
-	if (g_data != NULL)
+	if (data != NULL)
 	{
-		if (g_data->infile != -1)
-			close(g_data->infile);
-		if (g_data->outfile != -1)
-			close(g_data->outfile);
-		if (g_data->pipe_read != -1)
-			close(g_data->pipe_read);
-		if (g_data->pipe_write != -1)
-			close(g_data->pipe_write);
-		free(g_data);
-		g_data = NULL;
+		if (data->infile != -1)
+			close(data->infile);
+		if (data->outfile != -1)
+			close(data->outfile);
+		if (data->pipe_read != -1)
+			close(data->pipe_read);
+		if (data->pipe_write != -1)
+			close(data->pipe_write);
+		free(data);
+		data = NULL;
 	}
 	perror("Error in function. Exiting");
 	exit(EXIT_FAILURE);

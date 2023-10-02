@@ -6,45 +6,44 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/30 23:23:48 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/01 18:27:08 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
-t_pipex	*g_data;
-
-void	pipe_cmds(char *cmd, char **env)
+void	pipe_cmds(t_pipex **data, char *cmd, char **env)
 {
 	pid_t	pid;
 	int		p_fd[2];
 
 	if (pipe(p_fd) == -1)
 		exit(0);
-	g_data->pipe_read = p_fd[0];
-	g_data->pipe_write = p_fd[1];
+	(*data)->pipe_read = p_fd[0];
+	(*data)->pipe_write = p_fd[1];
 	pid = fork();
 	if (pid == -1)
 		handle_error();
 	if (pid == 0)
 	{
-		close(g_data->pipe_read);
-		g_data->pipe_read = -1;
-		dup2(g_data->pipe_write, 1);
+		close((*data)->pipe_read);
+		(*data)->pipe_read = -1;
+		dup2((*data)->pipe_write, 1);
 		if (exec(cmd, env) == -1)
 			handle_error();
 	}
 	else
 	{
-		close(g_data->pipe_write);
-		g_data->pipe_write = -1;
-		dup2(g_data->pipe_read, 0);
+		close((*data)->pipe_write);
+		(*data)->pipe_write = -1;
+		dup2((*data)->pipe_read, 0);
 	}
 }
 
 int	check_cmds(int argc, char *argv[], char *env[])
 {
 	char	**path_vec;
+	char	*path;
 	int		i;
 
 	i = 2;
@@ -55,89 +54,98 @@ int	check_cmds(int argc, char *argv[], char *env[])
 	while (i < argc - 1)
 	{
 		path_vec = ft_split(argv[i++], ' ');
-		if (!get_path(path_vec[0], env))
+		path = get_path(path_vec[0], env);
+		ft_free_vec(path_vec);
+		if (!path)
 		{
-			i = 0;
-			while (path_vec[i])
-				free(path_vec[i++]);
-			free(path_vec);
-			path_vec = NULL;
-			return (-1);
+			i = -1;
 		}
+		if (i == -1)
+			return (-1);
+		free(path);
+		path = NULL;
 	}
-	free(path_vec);
-	path_vec = NULL;
+	free(path);
 	return (0);
 }
 
-void	input_here_doc(char *argv[])
+void	input_here_doc(t_pipex **data, char *argv[])
 {
 	char	*line;
 
-	close(g_data->pipe_read);
+	close((*data)->pipe_read);
+	(*data)->pipe_read = -1;
 	while (1)
 	{
 		line = get_next_line(0);
-		if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0)
+		if (ft_strncmp(line, argv[2], (ft_strlen(argv[2]) - 1)) == 0)
 		{
 			free(line);
 			exit(0);
 		}
-		ft_putstr_fd(line, g_data->pipe_write);
 		free(line);
 	}
-	close(g_data->pipe_write);
+	close((*data)->pipe_write);
+	(*data)->pipe_write = -1;
 }
 
-void	manage_here_doc(int argc, char *argv[])
+void	manage_here_doc(t_pipex **data, int argc, char *argv[])
 {
 	pid_t	pid;
 	int		p_fd[2];
 
-	if (pipe(p_fd) == -1)
+	if (pipe(p_fd) == -1*)
 		exit(0);
-	g_data->pipe_read = p_fd[0];
-	g_data->pipe_write = p_fd[1];
-	close(g_data->outfile);
-	g_data->outfile = open_file(argv[argc - 1], 2);
+	(*data)->pipe_read = p_fd[0];
+	(*data)->pipe_write = p_fd[1];
+	close(p_fd[0]);
+	close(p_fd[1]);
+	close((*data)->outfile);
+	(*data)->outfile = open_file(argv[argc - 1], 2);
+	dup2((*data)->infile, 0);
+	close((*data)->infile);
+	close((*data)->outfile);
+	(*data)->outfile = -1;
+	(*data)->infile = -1;
 	pid = fork();
 	if (pid == -1)
 		handle_error();
 	if (pid == 0)
+		input_here_doc(&data, argv);
+	if (pid != 0)
 	{
-		input_here_doc(argv);
-	}
-	else
-	{
-		close(g_data->pipe_write);
-		dup2(g_data->pipe_read, 0);
+		close((*data)->pipe_write);
+		dup2((*data)->pipe_read, 0);
 		wait(NULL);
 	}
 }
 
 int	main(int argc, char *argv[], char *env[])
 {
+	t_pipex *data;
 	int		i;
 
 	if (check_cmds(argc, argv, env) < 0)
-		exit(1);
-	initialize_g_data(argc, argv);
+		exit(0);
+	data = initialize_data(argc, argv);
 	i = 2;
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
-		manage_here_doc(argc, argv);
+		manage_here_doc(&data, argc, argv);
+		i = 3;
 	}
 	else
 	{
-		dup2(g_data->infile, 0);
-		close(g_data->infile);
+		dup2(data->infile, 0);
+		close(data->infile);
+		data->infile = -1;
 	}
-	g_data->infile = -1;
-	while (i < argc - 2 && g_data->control != -1)
-		pipe_cmds(argv[i++], env);
-	dup2(g_data->outfile, 1);
-	close(g_data->outfile);
-	if (exec(argv[argc - 2], env) == -1 && g_data->control != -1)
+	while (i < argc - 2)
+		pipe_cmds(&data, argv[i++], env);
+	dup2(data->outfile, 1);
+	close(data->outfile);
+	if (exec(argv[argc - 2], env) == -1)
 		handle_error();
-	close(g_data->pipe_read);
+	close(data->pipe_read);
+	free(data);
 }
