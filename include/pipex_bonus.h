@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/02 20:01:30 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/03 14:10:05 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,8 @@ typedef struct s_pipex
 char	*get_path(char *cmd, char *env[]);
 int		check_args(int argc, char *argv[]);
 int		get_next_line(char **line);
+
+// here_doc.c
+int	do_here_doc(t_pipex *data, int argc, char *argv[]);
 
 #endif

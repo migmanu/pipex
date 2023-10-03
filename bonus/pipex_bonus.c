@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 16:45:31 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/02 20:40:08 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/03 14:23:43 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ int	fill_data(t_pipex *data, int argc, char *argv[])
 			clean_fds(data);
 			return (PIPE_ERR);
 	}
+	data->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
-		data->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0777);
+		data->infile = open(HERE_DOC, O_WRONLY | O_CREAT | O_APPEND, 0777);
 		if (data->outfile < 0)
 		{
 			ft_putendl_fd("Open function failed", 2);
@@ -42,42 +43,12 @@ int	fill_data(t_pipex *data, int argc, char *argv[])
 		return (0);
 	}
 	data->infile = open(argv[1], O_RDONLY, 0777);
-	data->outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	return (0);
-}
-
-int	do_here_doc(t_pipex *data, int argc, char *argv[])
-{
-	ft_putendl_fd("do_here_doc init", 2);
-	pid_t pid;
-	char *line;
-
-	printf("%d", argc);
-	pid = fork();
-	if (pid == -1)
+	if (data->infile < 0 || data->outfile < 0)
 	{
 		clean_fds(data);
-		exit(FORK_ERR); // TODO handle_error
-	}
-	if (pid == 0)
-	{
-		while (get_next_line(&line))
-		{
-			dup2(data->outfile, 1);
-			ft_putendl_fd("line found", 2);
-			ft_putendl_fd(line, 2);
-			if (ft_strncmp(line, argv[2], ft_strlen(argv[2])) == 0)
-				exit(0);
-			ft_putstr_fd(line, 1);
-			free(line);
-		}
-	}
-	else
-	{
-		wait(NULL);
+		return (OPEN_ERR);
 	}
 	return (0);
-	
 }
 
 int	main(int argc, char *argv[])
