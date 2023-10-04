@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/29 23:33:35 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/03 19:39:49 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	child(char *argv[], int fd[], char *env[])
 {
 	int	filein;
 
-	printf("child ini, execute command %s\n", argv[2]);
 	filein = open(argv[1], O_RDONLY, 0777);
 	if (filein == -1)
 		error();
@@ -32,7 +31,6 @@ void	parent(char *argv[], int fd[], char *env[])
 {
 	int	fileout;
 
-	printf("parent ini, execute command %s\n", argv[3]);
 	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1)
 		error();

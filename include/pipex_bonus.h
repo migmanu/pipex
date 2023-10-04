@@ -6,13 +6,13 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/03 14:10:05 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/03 16:01:53 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_BONUS_H
 # define PIPEX_BONUS_H
-# define HERE_DOC ".tmp_here_doc_file"
+# define HERE_DOC "/tmp/.here_doc_file"
 
 # define CMD_NOT_FOUND 127
 # define ERROR			1
@@ -37,6 +37,8 @@ typedef struct s_pipex
 	int	infile;
 	int	outfile;
 	int	pipe[2][2];
+	int	here_doc;
+	int	argc;
 }	t_pipex;
 
 # ifndef FALSE

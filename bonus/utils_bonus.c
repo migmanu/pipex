@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 17:04:13 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/02 20:38:31 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2023/10/03 15:17:53 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_args(int argc, char *argv[])
 		ft_putendl_fd("Not enough args. Use: ./pipex file1 cmd1 cmd2 file2", 2);
 		return (ARG_ERR);
 	}
-	if (ft_strnstr(argv[1], "here_doc", 8) == 0)
+	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 		return (0);
 	if (open(argv[1], 0, 0) < 0)
 	{
