@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 16:45:31 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/03 19:29:57 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/04 13:04:21 by migmanu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	clean_fds(t_pipex *data)
 	close(data->pipe[0][1]);
 	close(data->pipe[1][0]);
 	close(data->pipe[1][1]);
+	free(data);
 }
 
 int	fill_data(t_pipex *data, int argc, char *argv[])
@@ -51,25 +52,56 @@ int	fill_data(t_pipex *data, int argc, char *argv[])
 	return (0);
 }
 
+void	exec(char *cmd_str, char *env[])
+{
+	char	**cmd;
+	char	*path;
+	int		i;
+
+	cmd = ft_split(cmd_str, ' ');
+	path = get_path(cmd[0], env);
+	ft_putendl_fd("exec cmd:", 2);
+	ft_putendl_fd(cmd[0], 2);
+	i = 0;
+	if (!path)
+	{
+		while (cmd[i])
+			free(cmd[i++]);
+		free(cmd);
+		exit(1);
+	}
+	if (execve(path, cmd, env) == -1)
+		exit(1);
+}
+
 void	pipe_cmds(t_pipex *data, char *argv[], char *env[])
 {
+	ft_putendl_fd("pipe_cmds init", 2);
 	pid_t	pid;
 	int		i;
 	int		use_pipe;
 
+	pipe(data->pipe[0]);
 	use_pipe = 0;
 	i = 2 + data->here_doc;
 	while (i < data->argc - 2)
 	{
+		ft_putendl_fd("while init i:", 2);
+		ft_putnbr_fd(i, 2);
 		pid = fork();
 		if (pid == 0)
 		{
-			exec(data, argv[i], env, use_pipe);
+			ft_putendl_fd("child init", 2);
+			dup2(data->pipe[0][1], 1);
+			exec(argv[i], env);
 		}
 		else
 		{
+			ft_putendl_fd("parent init", 2);
 			wait(NULL);
-			exec(data, argv[i], env, use_pipe);
+			dup2(data->pipe[0][0], 0);
+			dup2(data->outfile, 1);
+			exec(argv[i], env);
 		}
 		i++;
 		if (++use_pipe > 1)
@@ -77,7 +109,7 @@ void	pipe_cmds(t_pipex *data, char *argv[], char *env[])
 	}
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *env[])
 {
 	t_pipex	data;
 
@@ -95,7 +127,6 @@ int	main(int argc, char *argv[])
 		dup2(data.infile, 0);
 		close(data.infile);
 	}
-	//while (i < argc - 2)
-	//	pipe_cmds(&data, argv[i++], env);
+	pipe_cmds(&data, argv, env);
 	return (0);
 }
