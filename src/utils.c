@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/23 14:12:03 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/29 23:33:49 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/05 14:26:29 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,29 @@ void	exec(char *cmd_str, char *env[])
 		while (cmd[i])
 			free(cmd[i++]);
 		free(cmd);
-		error();
+		error(CMD_NOT_FOUND);
 	}
 	if (execve(path, cmd, env) == -1)
-		error();
+		error(CMD_NOT_FOUND);
 }
 
-void	error(void)
+void	error(int err)
 {
-	perror("Error in function. Exiting");
-	exit(EXIT_FAILURE);
+	if (err ==  CMD_NOT_FOUND)
+	{
+		perror("Command not found. Path:");	
+		exit(CMD_NOT_FOUND);
+	}
+	else if (err == ERROR)
+	{
+		perror("Input file not found");	
+		exit(1);
+	}
+	else
+	{
+		perror("Error in function. Exiting");
+		exit(EXIT_FAILURE);
+	}
 }
 /*
 int	main(int argc, char *argv[], char *env[])

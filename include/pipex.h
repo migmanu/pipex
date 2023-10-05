@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:24:25 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/09/26 14:53:45 by migmanu          ###   ########.fr       */
+/*   Updated: 2023/10/05 13:59:48 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@
 # include <stdlib.h>
 # include <limits.h>
 # include "../libft/libft.h"
+
+# define CMD_NOT_FOUND 127
+# define ERROR			1
+# define ARG_ERR		3
+# define OPEN_ERR		4
+# define PIPE_ERR		5
+# define FORK_ERR		6
 
 typedef struct s_pipex
 {
@@ -46,7 +53,7 @@ typedef enum e_bool
 # endif
 
 // utils.c
-void	error(void);
+void	error(int err);
 void	exec(char *cmd_str, char *env[]);
 
 #endif
