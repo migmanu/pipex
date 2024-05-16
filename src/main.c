@@ -6,7 +6,7 @@
 /*   By: jmigoya- <jmigoya-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 17:26:47 by jmigoya-          #+#    #+#             */
-/*   Updated: 2023/10/05 14:26:05 by jmigoya-         ###   ########.fr       */
+/*   Updated: 2024/05/16 10:00:01 by jmigoya-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ int	main(int argc, char *argv[], char *env[])
 	else
 		parent(argv, fd, env);
 	ft_putendl_fd("return 0", 2);
-	return(0);
+	return (0);
 }
